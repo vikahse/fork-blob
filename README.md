@@ -1,22 +1,31 @@
 # fork-blob
 
+
+### Команды для запуска теста с бинарником размера 100MB:
+
+```
+bash blob_test.sh
+```
+---
+
+### Либо прогон тестов вручную
+
 ### Создание второго файла, с изменением 1 байта:
 
-`cp test.bin test_modified.bin`
-
-`printf '\x01' | dd of=modified.bin bs=1 seek=500000 conv=notrunc`
-
----
+```
+cp test.bin test_modified.bin
+printf '\x01' | dd of=modified.bin bs=1 seek=500000 conv=notrunc
+```
 
 ### Команды для запуска и проверки работы алгоритма:
 
-`gcc -o main main.c rollsum.c -lcrypto`
-
-`./main test.bin > orig.manifest`
-
-`./main test_modified.bin > modified.manifest`
-
-`diff orig.manifest modified.manifest`
+```
+gcc -o main main.c rollsum.c -lcrypto
+./main test.bin > orig.manifest
+./main test_modified.bin > modified.manifest
+diff orig.manifest modified.manifest
+```
+---
 
 Пример вывода разницы манифестов:
 
@@ -27,8 +36,3 @@
 ```
 
 
----
-
-### Команды для запуска теста:
-
-`bash blob_test.sh`
