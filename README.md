@@ -40,7 +40,7 @@ diff manifest manifest2
 ```
 
 Пример :
-![Пример вставки байта](insert_example.png "Insert")
+![Пример вставки байта](img/insert_example.png "Insert")
 
 ---
 #### Удалить байт с рандомной позиции
@@ -58,7 +58,7 @@ diff manifest manifest2
 
 ```
 Пример :
-![Пример удаления байта](delete_example.png "Delete")
+![Пример удаления байта](img/delete_example.png "Delete")
 
 ---
 #### Поставить байт на другую позицию
@@ -80,7 +80,7 @@ diff manifest manifest2
 
 ```
 Пример :
-![Пример перемещения байта](replace_example.png "Replace")
+![Пример перемещения байта](img/replace_example.png "Replace")
 
 
 
