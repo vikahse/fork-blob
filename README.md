@@ -18,6 +18,11 @@ bash test_replace.sh
 ---
 ### Либо прогон тестов вручную на более больших файлах
 
+#### Скомпилировать main.c в бинарник
+```
+gcc -I/opt/homebrew/opt/openssl/include -L/opt/homebrew/opt/openssl/lib -lcrypto -o main main.c
+```
+
 #### Сгенерировать файл 
 ```
 size=1048576
