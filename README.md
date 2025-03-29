@@ -1,39 +1,87 @@
 # fork-blob
 
-### Решение было протестировано на файлах размера 1GB и 100MB, различие было только в 1 чанке, файлы были взяты [отсюда]([/guides/content/editing-an-existing-page](https://ash-speed.hetzner.com/)) 
+### Решение было протестировано на файлах размера 1GB и 100MB, различие было только в 1 чанке, файлы были сгенерены
 
-#### Пример для запуска теста с бинарником размера 100MB, который лежит на гитхабе:
-
-```
-bash blob_test.sh
-```
----
-
-#### Либо прогон тестов вручную на более больших файлах
-
-#### Создание второго файла, с изменением 1 байта:
+#### Пример для запуска теста с бинарником размера 1048576 байт ~1MB, который генерится:
 
 ```
-cp test.bin test_modified.bin
-printf '\x01' | dd of=test_modified.bin bs=1 seek=500000 conv=notrunc
+bash test_insert.sh
 ```
-
-#### Команды для запуска и проверки работы алгоритма:
-
 ```
-gcc -o main main.c rollsum.c -lcrypto
-./main test.bin > orig.manifest
-./main test_modified.bin > modified.manifest
-diff orig.manifest modified.manifest
+bash test_delete.sh
+```
+```
+bash test_replace.sh
 ```
 ---
+### Либо прогон тестов вручную на более больших файлах
 
-Пример вывода разницы манифестов:
+#### Скомпилировать main.c в бинарник
+```
+gcc -I/opt/homebrew/opt/openssl/include -L/opt/homebrew/opt/openssl/lib -lcrypto -o main main.c
+```
+
+#### Сгенерировать файл 
+```
+size=1048576
+dd if=/dev/random of=test.bin bs=1 count=$size
 
 ```
-<   "131072:31cbafc3666cd7616bf272fc79ab0332a9a2b4624565f05ac4a4560f41842f67",
+#### Вставить байт на рандом позицию
+
+```
+idx=$((RANDOM % 200))
+head -c "$idx" test.bin > test2.bin
+echo -n $'\x01' >> test2.bin
+tail -c "+$((idx + 1))" test.bin >> test2.bin
+
+./main test.bin > manifest
+./main test2.bin > manifest2
+
+diff manifest manifest2
+
+```
+
+Пример :
+![Пример вставки байта](img/insert_example.png "Insert")
+
 ---
->   "131072:57558650e5b29302e40e181b38e8d38d1a174c31ccde03e3fc9b828360d72566",
-```
+#### Удалить байт с рандомной позиции
 
+```
+idx=$((RANDOM % 200))
+head -c "$idx" test.bin > test2.bin
+echo -n $'\x01' >> test2.bin
+tail -c "+$((idx + 1))" test.bin >> test2.bin
+
+./main test.bin > manifest
+./main test2.bin > manifest2
+
+diff manifest manifest2
+
+```
+Пример :
+![Пример удаления байта](img/delete_example.png "Delete")
+
+---
+#### Поставить байт на другую позицию
+
+```
+idx=$((RANDOM % 200))
+new_idx=$((RANDOM % 200))
+
+byte=$(dd if=test.bin bs=1 skip="$((idx - 1))" count=1 2>/dev/null | xxd -p)
+
+head -c "$((new_idx - 1))" test.bin > test2.bin
+echo -n $'\x'$byte >> test2.bin
+tail -c "+$((new_idx + 1))" test.bin >> test2.bin
+
+./main test.bin > manifest
+./main test2.bin > manifest2
+
+diff manifest manifest2
+
+```
+Пример :
+![Пример перемещения байта](img/replace_example.png "Replace")
 
