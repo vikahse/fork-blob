@@ -2,12 +2,12 @@
 
 size=1048576
 
-dd if=/dev/random of=test.bin bs=1 count=$size
-
 for i in {1..20}; do
     echo "************************************************"
     echo "Test number $i"
     echo "************************************************"
+    
+    dd if=/dev/random of=test.bin bs=1 count=$size
 
     idx=$((RANDOM % 200))
 

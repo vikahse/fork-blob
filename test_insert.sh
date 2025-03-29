@@ -1,7 +1,6 @@
 #!/bin/bash
-size=1048576
 
-dd if=/dev/random of=test.bin bs=1 count=$size
+size=1048576
 
 idx=$((RANDOM % 200))
 
@@ -10,6 +9,8 @@ for i in {1..20}; do
     echo "************************************************"
     echo "Test number $i"
     echo "************************************************"
+
+    dd if=/dev/random of=test.bin bs=1 count=$size
 
     head -c "$idx" test.bin > test2.bin #idx включительно
     echo -n $'\x01' >> test2.bin
