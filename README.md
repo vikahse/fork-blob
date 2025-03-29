@@ -8,6 +8,9 @@
 bash test_insert.sh
 ```
 ```
+bash test_change.sh
+```
+```
 bash test_delete.sh
 ```
 ```
